@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { envKey } from './config/constant';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeORMConfig } from './config/typeorm.config';
 
 @Module({
   imports: [
@@ -17,6 +19,7 @@ import { envKey } from './config/constant';
           : 'dev'
       }.env`,
     }),
+    TypeOrmModule.forRootAsync(typeORMConfig),
   ],
   controllers: [AppController],
   providers: [AppService],
