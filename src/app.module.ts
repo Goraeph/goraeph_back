@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { envKey } from './config/constant';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './config/typeorm.config';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { typeORMConfig } from './config/typeorm.config';
       }.env`,
     }),
     TypeOrmModule.forRootAsync(typeORMConfig),
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
