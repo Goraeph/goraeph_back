@@ -1,12 +1,18 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn({ type: 'int' })
   id: number;
 
-  // 활동 여부
-  @Column({ default: true })
+  @Column({ default: true, comment: '활성화 계정 여부' })
   isActive: boolean;
 
   @Column({ unique: true })
@@ -21,14 +27,21 @@ export class User {
   @Column()
   name: string;
 
-  // 프로필 이미지 사진 저장 경로
-  @Column({ nullable: true })
+  @Column({ nullable: true, comment: '프로필 이미지 사진 저장 경로' })
   profileImageUrl: string;
 
   @Column({ type: 'date', nullable: true })
   birthDate: Date;
 
-  // 성인 여부
-  @Column({ default: false })
+  @Column({ default: false, comment: '성인 여부' })
   isAdult: boolean;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 }
