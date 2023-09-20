@@ -6,6 +6,7 @@ import { envKey } from './config/constant';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './config/typeorm.config';
 import { UserModule } from './user/user.module';
+import { MapModule } from './map/map.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UserModule } from './user/user.module';
     }),
     TypeOrmModule.forRootAsync(typeORMConfig),
     UserModule,
+    MapModule,
   ],
   controllers: [AppController],
   providers: [AppService],
