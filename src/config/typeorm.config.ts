@@ -13,7 +13,7 @@ export const typeORMConfig: TypeOrmModuleAsyncOptions = {
       username: configService.get(envKey.db.username),
       password: configService.get(envKey.db.password),
       database: configService.get(envKey.db.database),
-      entities: [__dirname + '/../**/*.entity.{js,ts}'],
+      entities: [__dirname + '/../**/**/*.entity.{js,ts}'],
       synchronize: configService.get(envKey.db.synchronize),
     };
 
