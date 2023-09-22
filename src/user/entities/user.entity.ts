@@ -1,4 +1,4 @@
-import { Map } from 'src/map/entities/map.entity';
+import { Space } from 'src/space/entities/space.entity';
 import {
   Column,
   CreateDateColumn,
@@ -47,6 +47,6 @@ export class User {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @OneToMany(() => Map, (map) => map.owner)
-  maps: Map[];
+  @OneToMany(() => Space, (space) => space.owner)
+  maps: Space[];
 }

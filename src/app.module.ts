@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { typeORMConfig } from './config/typeorm.config';
 import { UserModule } from './user/user.module';
 import { MapModule } from './map/map.module';
+import { SpaceModule } from './space/space.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { MapModule } from './map/map.module';
     TypeOrmModule.forRootAsync(typeORMConfig),
     UserModule,
     MapModule,
+    SpaceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
