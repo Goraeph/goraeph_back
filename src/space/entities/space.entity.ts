@@ -13,8 +13,9 @@ export class Space {
   @Column()
   description: string;
 
-  @Column({ type: 'json' })
-  colorTheme: ColorTheme;
+  // TODO: [kangmin] Column에서도 nullable 하게, ?를 붙여서 undefined를 허용. 둘 다 해야하는 거 맞나?
+  @Column({ type: 'json', nullable: true })
+  colorTheme?: ColorTheme;
 
   @ManyToOne(() => User, (user) => user.maps)
   owner: User;
