@@ -17,9 +17,9 @@ export class SpaceService {
   ) {}
 
   async create(createSpaceDto: CreateSpaceDto) {
-    const { name, description, ownerID } = createSpaceDto;
+    const { name, description, userID } = createSpaceDto;
 
-    const user = await this.userRepository.findOneBy({ id: ownerID });
+    const user = await this.userRepository.findOneBy({ id: userID });
     const space = this.spaceRepository.create({
       name,
       description,
