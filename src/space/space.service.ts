@@ -28,22 +28,26 @@ export class SpaceService {
 
     await this.spaceRepository.save(space);
 
-    return;
+    return space;
   }
 
-  findAll() {
-    return `This action returns all space`;
+  async findAll(userId: number): Promise<Space[]> {
+    const spaceList = await this.spaceRepository.find({
+      where: { userId: userId },
+    });
+
+    return spaceList;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} space`;
+  async findOne(id: string): Promise<Space> {
+    return await this.spaceRepository.findOneBy({ id });
   }
 
-  update(id: number, updateSpaceDto: UpdateSpaceDto) {
-    return `This action updates a #${id} space, ${updateSpaceDto}`;
+  async update(id: string, updateSpaceDto: UpdateSpaceDto) {
+    return await this.spaceRepository.update({ id }, updateSpaceDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} space`;
+  async remove(id: string) {
+    return await this.spaceRepository.delete({ id });
   }
 }

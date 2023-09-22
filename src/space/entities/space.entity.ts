@@ -1,11 +1,20 @@
 import { User } from 'src/user/entities/user.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { ColorTheme } from '../types/colorTheme';
 
 @Entity()
 export class Space {
   @PrimaryGeneratedColumn('uuid')
   id: string;
+
+  @Column()
+  userId: number;
 
   @Column()
   name: string;
@@ -18,5 +27,6 @@ export class Space {
   colorTheme?: ColorTheme;
 
   @ManyToOne(() => User, (user) => user.maps)
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   owner: User;
 }

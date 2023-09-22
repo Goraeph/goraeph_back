@@ -20,23 +20,23 @@ export class SpaceController {
     return this.spaceService.create(createSpaceDto);
   }
 
-  @Get()
-  findAll() {
-    return this.spaceService.findAll();
+  @Get('/all/:userId')
+  findAll(@Param('userId') userId: number) {
+    return this.spaceService.findAll(userId);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.spaceService.findOne(+id);
+    return this.spaceService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateSpaceDto: UpdateSpaceDto) {
-    return this.spaceService.update(+id, updateSpaceDto);
+    return this.spaceService.update(id, updateSpaceDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.spaceService.remove(+id);
+    return this.spaceService.remove(id);
   }
 }
