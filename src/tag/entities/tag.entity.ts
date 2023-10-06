@@ -7,4 +7,7 @@ export class Tag {
 
   @Column({ unique: true })
   name: string;
+
+  @Column({ default: true })
+  isValid: boolean;
 }
