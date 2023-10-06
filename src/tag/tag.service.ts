@@ -22,9 +22,7 @@ export class TagService {
   }
 
   async findAll() {
-    const tagList = await this.tagRepository.find();
-
-    return tagList;
+    return await this.tagRepository.find();
   }
 
   async findByName(name: string) {
