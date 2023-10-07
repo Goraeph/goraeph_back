@@ -8,6 +8,7 @@ import { typeORMConfig } from './config/typeorm.config';
 import { UserModule } from './user/user.module';
 import { SpaceModule } from './space/space.module';
 import { TagModule } from './tag/tag.module';
+import { NoteModule } from './note/note.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { TagModule } from './tag/tag.module';
     UserModule,
     SpaceModule,
     TagModule,
+    NoteModule,
   ],
   controllers: [AppController],
   providers: [AppService],
