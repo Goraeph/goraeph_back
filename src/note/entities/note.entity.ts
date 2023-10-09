@@ -21,21 +21,6 @@ export class Note {
   @Column({ nullable: false })
   title: string;
 
-  @Column()
-  previewImageUrl: string;
-
-  @Column()
-  description: string;
-
-  @Column({ default: false })
-  isLink: boolean;
-
-  @Column()
-  linkContent: string;
-
-  @Column()
-  content: string;
-
   @ManyToOne(() => Space, (space) => space.notes)
   @JoinColumn({ name: 'spaceId', referencedColumnName: 'id' })
   space: Space;
@@ -48,9 +33,24 @@ export class Note {
   @JoinColumn({ name: 'editedBy', referencedColumnName: 'id' })
   editedBy: User;
 
+  @Column()
+  previewImageUrl?: string;
+
   @ManyToMany(() => Tag, (tag) => tag.notes)
   @JoinTable({ name: 'note_tag_bridge' })
   tags: Tag[];
+
+  @Column()
+  description?: string;
+
+  @Column({ default: false })
+  isLink: boolean;
+
+  @Column()
+  linkContent: string;
+
+  @Column()
+  content: string;
 
   @CreateDateColumn()
   createdAt: Date;
