@@ -66,19 +66,67 @@ export class NoteService {
     return await this.noteRepository.save(note);
   }
 
-  findAll() {
-    return `This action returns all note`;
+  async findAll() {
+    return await this.noteRepository.find({
+      relations: {
+        tags: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} note`;
+  async findOne(id: string) {
+    return await this.noteRepository.find({
+      where: { id: id },
+      relations: { tags: true },
+    });
   }
 
-  update(id: number, updateNoteDto: UpdateNoteDto) {
-    return `This action updates a #${id} note`;
+  async update(id: string, updateNoteDto: UpdateNoteDto) {
+    const {
+      title,
+      previewImageUrl,
+      tags,
+      description,
+      isLink,
+      linkContent,
+      content,
+      userId,
+    } = updateNoteDto;
+
+    const user = await this.userRepository.findOneBy({ id: userId });
+
+    const newTags: Tag[] = [];
+    for (const tag of tags) {
+      let storedTag = await this.tagRepository.findOne({
+        where: { name: tag.trim().replace('#', '') },
+      });
+      if (!storedTag) {
+        storedTag = this.tagRepository.create({
+          name: tag.trim().replace('#', ''),
+        });
+        await this.tagRepository.save(storedTag);
+      }
+      newTags.push(storedTag);
+    }
+
+    const note = await this.noteRepository.findOne({
+      relations: { tags: true },
+      where: { id: id },
+    });
+
+    note.title = title;
+    note.previewImageUrl = previewImageUrl;
+    note.description = description;
+    note.isLink = isLink;
+    note.linkContent = linkContent;
+    note.content = content;
+    note.tags = newTags;
+    note.editedBy = user;
+
+    return await this.noteRepository.save(note);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} note`;
+  remove(id: string) {
+    return this.noteRepository.delete({ id: id });
   }
 }

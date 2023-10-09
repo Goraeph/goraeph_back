@@ -27,16 +27,16 @@ export class NoteController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.noteService.findOne(+id);
+    return this.noteService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateNoteDto: UpdateNoteDto) {
-    return this.noteService.update(+id, updateNoteDto);
+    return this.noteService.update(id, updateNoteDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.noteService.remove(+id);
+    return this.noteService.remove(id);
   }
 }
