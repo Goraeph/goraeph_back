@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Note } from 'src/note/entities/note.entity';
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class Tag {
@@ -10,4 +11,7 @@ export class Tag {
 
   @Column({ default: true })
   isValid: boolean;
+
+  @ManyToMany(() => Note, (note) => note.tags)
+  notes: Note[];
 }

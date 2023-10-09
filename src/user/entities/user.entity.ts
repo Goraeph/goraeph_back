@@ -1,3 +1,4 @@
+import { Note } from 'src/note/entities/note.entity';
 import { Space } from 'src/space/entities/space.entity';
 import {
   Column,
@@ -38,6 +39,15 @@ export class User {
   @Column({ default: false, comment: '성인 여부' })
   isAdult: boolean;
 
+  @OneToMany(() => Space, (space) => space.owner)
+  maps: Space[];
+
+  @OneToMany(() => Note, (note) => note.createdBy)
+  createdNotes: Note[];
+
+  @OneToMany(() => Note, (note) => note.editedBy)
+  editedNotes: Note[];
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -46,7 +56,4 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
-
-  @OneToMany(() => Space, (space) => space.owner)
-  maps: Space[];
 }

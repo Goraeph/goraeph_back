@@ -4,9 +4,11 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ColorTheme } from '../types/colorTheme';
+import { Note } from 'src/note/entities/note.entity';
 
 @Entity()
 export class Space {
@@ -29,4 +31,7 @@ export class Space {
   @ManyToOne(() => User, (user) => user.maps)
   @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   owner: User;
+
+  @OneToMany(() => Note, (note) => note.space)
+  notes: Note[];
 }
