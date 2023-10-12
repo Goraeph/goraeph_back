@@ -1,5 +1,5 @@
-# Goraphee-Back
+# Goraeph-Back
 
-This is Goraphee 🐳 API.
+This is Goraeph 🐳 API.
 
 Let's make something interesting.
