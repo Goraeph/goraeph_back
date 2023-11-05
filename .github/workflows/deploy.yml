@@ -21,9 +21,9 @@ jobs:
           script: |
             whoami
             cd ~/goraeph_deploy/goraeph_back
-            git checkout develop
-            git config --global --add safe.directory /home/***/goraeph_deploy/goraeph_back
+            sudo git config --global --add safe.directory /home/***/goraeph_deploy/goraeph_back
+            sudo git checkout develop
             sudo git pull
-            npm install
-            npm start:dev
+            sudo npm install
+            sudo npm start:dev
 
