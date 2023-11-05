@@ -22,4 +22,3 @@ jobs:
             sudo git pull
             sudo npm ci
             sudo npm run build
-            sudo node ./dist/main.js
