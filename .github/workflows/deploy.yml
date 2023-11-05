@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.3.0
-
+      - uses: actions/setup-node@v4.0.0
       - name: execute remote ssh & deploy backend server
         uses: appleboy/ssh-action@master
         with:
@@ -19,6 +19,7 @@ jobs:
           script: |
             whoami
             cd ~/goraeph_deploy
+            git init
             sudo git pull
             npm install
             npm start:dev
