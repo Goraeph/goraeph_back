@@ -19,7 +19,7 @@ jobs:
           script: |
             whoami
             cd ~/goraeph_deploy
-            sudo git clone https://github.com/Goraeph/goraeph_back.git
+            sudo git pull
             npm install
             npm start:dev
 
