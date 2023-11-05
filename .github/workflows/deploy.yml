@@ -8,9 +8,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3.3.0
-      - uses: actions/setup-node@v4.0.0
-        with:
-          node-version: '18'
       - name: execute remote ssh & deploy backend server
         uses: appleboy/ssh-action@master
         with:
@@ -25,4 +22,5 @@ jobs:
             sudo git pull
             sudo npm ci
             sudo npm run build
+            sudo node ./dist/apps/server/main.js
 
