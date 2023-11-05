@@ -23,5 +23,6 @@ jobs:
             cd ~/goraeph_deploy/goraeph_back
             sudo git config --global --add safe.directory /home/***/goraeph_deploy/goraeph_back
             sudo git pull
-            sudo npm -v
+            sudo npm ci
+            sudo npm run start:dev
 
