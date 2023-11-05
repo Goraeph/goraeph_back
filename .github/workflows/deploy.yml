@@ -22,6 +22,7 @@ jobs:
             whoami
             cd ~/goraeph_deploy/goraeph_back
             git checkout develop
+            git config --global --add safe.directory /home/***/goraeph_deploy/goraeph_back
             sudo git pull
             npm install
             npm start:dev
