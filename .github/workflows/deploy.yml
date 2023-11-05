@@ -9,6 +9,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3.3.0
       - uses: actions/setup-node@v4.0.0
+        with:
+          node-version: '18'
       - name: execute remote ssh & deploy backend server
         uses: appleboy/ssh-action@master
         with:
@@ -18,8 +20,8 @@ jobs:
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
             whoami
-            cd ~/goraeph_deploy
-            git init
+            cd ~/goraeph_deploy/goraeph_back
+            git checkout develop
             sudo git pull
             npm install
             npm start:dev
