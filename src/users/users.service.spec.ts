@@ -14,6 +14,11 @@ describe('UserService Unit Test', () => {
     repo = unitRef.get(USER_REPOSITORY);
     userService = unit;
   });
+
+  afterAll(() => {
+    jest.clearAllMocks();
+  });
+
   describe('findAll()', () => {
     it('should occur error when find() goes wrong', async () => {
       repo.find.mockRejectedValue('error');
@@ -54,6 +59,7 @@ describe('UserService Unit Test', () => {
       expect(users).toEqual(mockUsers);
     });
   });
+
   describe('findById()', () => {
     it('should occur error when findOneBy() goes wrong.', async () => {
       repo.findOneBy.mockRejectedValue('error');
@@ -64,6 +70,7 @@ describe('UserService Unit Test', () => {
         expect(e).toEqual('error');
       }
     });
+
     it('should retrieve user from repo', async () => {
       const mockUser: User = {
         id: 1,
@@ -93,6 +100,7 @@ describe('UserService Unit Test', () => {
         expect(e).toEqual('error');
       }
     });
+
     it('should retrieve user from repo', async () => {
       const mockUser: User = {
         id: 1,
@@ -129,6 +137,7 @@ describe('UserService Unit Test', () => {
       expect(repo.findOneBy).toHaveBeenCalled();
       expect(err).toBeDefined();
     });
+
     it('should return null when cannot find user', async () => {
       repo.findOneBy.mockResolvedValue(null);
 
@@ -256,14 +265,130 @@ describe('UserService Unit Test', () => {
   });
 
   describe('update()', () => {
-    it.todo('should occur error when update() goes wrong.');
-    it.todo('should validate duplicate username');
-    it.todo('should validate duplicate email');
-    it.todo('should update user from repo');
+    it('should occur error when findById() goes wrong.', async () => {
+      repo.findOneBy.mockRejectedValue('error');
+      try {
+        const _ = await userService.update({ id: 1, username: '' });
+      } catch (error) {
+        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(error).toBeDefined();
+      }
+    });
+    it('should validate duplicate username', async () => {
+      const mockUser: User = {
+        id: 1,
+        username: '1',
+        email: '1@a.com',
+        password: '1',
+        isActivated: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      repo.findOneBy.mockResolvedValue(mockUser);
+      try {
+        const result = await userService.update({
+          id: 1,
+          username: '1',
+        });
+      } catch (error) {
+        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(error).toBeDefined();
+      }
+    });
+    it('should validate duplicate email', async () => {
+      const mockUser: User = {
+        id: 1,
+        username: '1',
+        email: '1@a.com',
+        password: '1',
+        isActivated: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      repo.findOneBy.mockResolvedValue(mockUser);
+      try {
+        const result = await userService.update({
+          id: 1,
+          email: '1@a.com',
+        });
+      } catch (error) {
+        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(error).toBeDefined();
+      }
+    });
+    it('should update user from repo', async () => {
+      const mockUser: User = {
+        id: 1,
+        username: '1',
+        email: '1@a.com',
+        password: '1',
+        isActivated: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+
+      repo.findOneBy.mockResolvedValue(null);
+
+      const updatedMockUser = mockUser;
+
+      updatedMockUser.username = 'test';
+      repo.save.mockResolvedValue(updatedMockUser);
+
+      const updatedUser = await userService.update({ id: 1, username: 'test' });
+
+      expect(updatedUser.username).toEqual('test');
+    });
   });
 
   describe('delete()', () => {
-    it.todo('should occur error when delete() goes wrong.');
-    it.todo('should delete user from repo');
+    it("should occur error when can't find user ", async () => {
+      repo.findOneBy.mockResolvedValue(null);
+
+      try {
+        const user = await userService.delete(1);
+      } catch (error) {
+        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(error).toBeDefined();
+      }
+    });
+    it('should occur error when remove() goes wrong', async () => {
+      const mockUser: User = {
+        id: 1,
+        username: '1',
+        email: '1@a.com',
+        password: '1',
+        isActivated: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.remove.mockRejectedValue('error');
+      try {
+        const user = await userService.delete(1);
+      } catch (error) {
+        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.remove).toHaveBeenCalled();
+        expect(error).toBeDefined();
+      }
+    });
+    it('should delete user from repo', async () => {
+      const mockUser: User = {
+        id: 1,
+        username: '1',
+        email: '1@a.com',
+        password: '1',
+        isActivated: true,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
+      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.remove.mockResolvedValue(mockUser);
+      try {
+        const user = await userService.delete(1);
+        expect(user).toEqual(mockUser);
+        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.remove).toHaveBeenCalled();
+      } catch (error) {}
+    });
   });
 });

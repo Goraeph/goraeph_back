@@ -82,10 +82,7 @@ export class UsersService {
       err = await this.validateUsernameDuplicate(dto.email);
       if (err !== null) throw err;
 
-      const user = await this.findById(dto.id);
-      Object.assign(user, dto);
-
-      await this.repo.save(user);
+      const user = await this.repo.save({ id: dto.id, ...dto });
 
       return user;
     } catch (error) {
@@ -93,7 +90,13 @@ export class UsersService {
     }
   }
 
-  async delete(): Promise<User> {
-    return null;
+  async delete(id: number): Promise<User> {
+    try {
+      const user = await this.findById(id);
+      const deletedUser = await this.repo.remove(user);
+      return deletedUser;
+    } catch (error) {
+      throw error;
+    }
   }
 }
