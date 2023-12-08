@@ -4,6 +4,12 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entities';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
+import { InternalServerException } from '../common/exceptions/internal.exception';
+import {
+  EmailInUseException,
+  UserNotFoundException,
+  UsernameInUseException,
+} from '../common/exceptions/auth.exception';
 
 @Injectable()
 export class UsersService {
@@ -13,7 +19,7 @@ export class UsersService {
     try {
       return await this.repo.find();
     } catch (e) {
-      throw e;
+      throw new InternalServerException();
     }
   }
 
@@ -22,7 +28,7 @@ export class UsersService {
       const user = await this.repo.findOneBy({ id });
       return user;
     } catch (e) {
-      throw e;
+      throw new UserNotFoundException();
     }
   }
 
@@ -31,7 +37,7 @@ export class UsersService {
       const user = await this.repo.findOneBy({ email });
       return user;
     } catch (e) {
-      throw e;
+      throw new UserNotFoundException();
     }
   }
 
@@ -40,13 +46,13 @@ export class UsersService {
       const user = await this.repo.findOneBy({ username });
       return user;
     } catch (e) {
-      throw e;
+      throw new UserNotFoundException();
     }
   }
   async validateEmailDuplicate(email: string): Promise<Error> {
     const user = await this.findByEmail(email);
     if (user !== null) {
-      return new Error('duplicate error');
+      return new EmailInUseException();
     }
     return null;
   }
@@ -54,7 +60,7 @@ export class UsersService {
   async validateUsernameDuplicate(email: string): Promise<Error> {
     const user = await this.findByEmail(email);
     if (user !== null) {
-      return new Error('duplicate error');
+      return new UsernameInUseException();
     }
     return null;
   }

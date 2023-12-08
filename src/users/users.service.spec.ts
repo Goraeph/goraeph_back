@@ -4,6 +4,12 @@ import { Repository } from 'typeorm';
 import { User } from './entities/user.entities';
 import { TestBed } from '@automock/jest';
 import { USER_REPOSITORY } from '../common/constants/constants';
+import { InternalServerException } from '../common/exceptions/internal.exception';
+import {
+  EmailInUseException,
+  UserNotFoundException,
+  UsernameInUseException,
+} from '../common/exceptions/auth.exception';
 
 describe('UserService Unit Test', () => {
   let userService: UsersService;
@@ -26,7 +32,7 @@ describe('UserService Unit Test', () => {
         const _ = await userService.findAll();
       } catch (e) {
         expect(repo.find).toHaveBeenCalled();
-        expect(e).toEqual('error');
+        expect(e).toStrictEqual(new InternalServerException());
       }
     });
 
@@ -67,7 +73,7 @@ describe('UserService Unit Test', () => {
         const _ = await userService.findById(1);
       } catch (e) {
         expect(repo.findOneBy).toHaveBeenCalled();
-        expect(e).toEqual('error');
+        expect(e).toStrictEqual(new UserNotFoundException());
       }
     });
 
@@ -97,7 +103,7 @@ describe('UserService Unit Test', () => {
         const _ = await userService.findByEmail('');
       } catch (e) {
         expect(repo.findOneBy).toHaveBeenCalled();
-        expect(e).toEqual('error');
+        expect(e).toStrictEqual(new UserNotFoundException());
       }
     });
 
@@ -135,7 +141,7 @@ describe('UserService Unit Test', () => {
       const err = await userService.validateEmailDuplicate('');
 
       expect(repo.findOneBy).toHaveBeenCalled();
-      expect(err).toBeDefined();
+      expect(err).toStrictEqual(new EmailInUseException());
     });
 
     it('should return null when cannot find user', async () => {
@@ -163,7 +169,7 @@ describe('UserService Unit Test', () => {
       const err = await userService.validateUsernameDuplicate('');
 
       expect(repo.findOneBy).toHaveBeenCalled();
-      expect(err).toBeDefined();
+      expect(err).toStrictEqual(new UsernameInUseException());
     });
     it('should return null when cannot find user', async () => {
       repo.findOneBy.mockResolvedValue(null);
