@@ -3,6 +3,7 @@ import { Expose } from 'class-transformer';
 import {
   IsBoolean,
   IsDate,
+  IsDateString,
   IsEmail,
   IsString,
   MinLength,
@@ -37,7 +38,7 @@ export class User extends Common {
   profileImg?: string;
 
   @Column({ nullable: true })
-  @IsDate()
+  @IsDateString()
   @ApiProperty()
   birthDate?: Date;
 

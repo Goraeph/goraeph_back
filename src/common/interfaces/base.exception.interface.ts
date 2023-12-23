@@ -1,10 +1,12 @@
 import { HttpException } from '@nestjs/common';
+import { ApiProperty } from '@nestjs/swagger';
 
 export interface IBaseException {
   errorCode: string;
   timeStamp: string;
   statusCode: number;
-  path: string;
+  path?: string;
+  msg?: string;
 }
 
 export class BaseException extends HttpException implements IBaseException {
@@ -13,8 +15,18 @@ export class BaseException extends HttpException implements IBaseException {
     this.errorCode = errorCode;
     this.statusCode = statusCode;
   }
+  @ApiProperty()
   errorCode: string;
+
+  @ApiProperty()
   statusCode: number;
+
+  @ApiProperty()
   timeStamp: string;
-  path: string;
+
+  @ApiProperty()
+  path?: string;
+
+  @ApiProperty()
+  msg?: string;
 }

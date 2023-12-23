@@ -32,8 +32,8 @@ export class IncorrectPasswordException extends BaseException {
   }
 }
 
-export class InvalidPasswordFieldException extends BaseException {
+export class FieldInvalidException extends BaseException {
   constructor() {
-    super(AuthExceptionCodeEnum.PasswordFieldInvalid, HttpStatus.BAD_REQUEST);
+    super(AuthExceptionCodeEnum.FieldInvalid, HttpStatus.BAD_REQUEST);
   }
 }

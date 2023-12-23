@@ -1,5 +1,6 @@
 import {
   ArgumentsHost,
+  BadRequestException,
   Catch,
   ExceptionFilter,
   HttpException,
@@ -9,6 +10,7 @@ import {
 import { BaseException } from '../interfaces/base.exception.interface';
 import { DateFormatEnum, format } from '../enums/date-format.enum';
 import { ValidationError } from 'class-validator';
+import { FieldInvalidException } from '../exceptions/auth.exception';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -22,42 +24,32 @@ export class AllExceptionFilter implements ExceptionFilter {
       res.timeStamp = format(DateFormatEnum.Datetime);
       res.path = request.path;
       response.status(res.statusCode).json({
-        ok: false,
-        error: {
-          errorCode: res.errorCode,
-          statusCode: res.statusCode,
-          timeStamp: res.timeStamp,
-          path: res.path,
-        },
-      });
-    } else if (Array.isArray(res) && checkType(res, ValidationError)) {
-      const result = unpackError(res);
-      response.status(HttpStatus.BAD_REQUEST).json({
-        ok: false,
-        error: [...result],
+        errorCode: res.errorCode,
+        statusCode: res.statusCode,
+        timeStamp: res.timeStamp,
+        path: res.path,
       });
     } else if (res instanceof NotFoundException) {
       response.status(HttpStatus.NOT_FOUND).json({
-        ok: false,
         error: {
           message: res.message,
           name: res.name,
         },
+      });
+    } else if (res instanceof BadRequestException) {
+      const message = res['response'].message[0];
+      const invalidFieldException = new FieldInvalidException();
+      invalidFieldException.msg = message;
+      invalidFieldException.timeStamp = format(DateFormatEnum.Datetime);
+
+      response.status(HttpStatus.BAD_REQUEST).json({
+        errorCode: invalidFieldException.errorCode,
+        statusCode: invalidFieldException.statusCode,
+        timeStamp: invalidFieldException.timeStamp,
+        msg: invalidFieldException.msg,
       });
     } else {
       response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({ ...res });
     }
   }
 }
-
-const checkType = (arr: any[], type: any) => {
-  return arr.every((item) => item instanceof type);
-};
-
-const unpackError = (arr: ValidationError[]) => {
-  const result = [];
-  arr.map(({ constraints, property }) => {
-    result.push({ constraints, property });
-  });
-  return result;
-};

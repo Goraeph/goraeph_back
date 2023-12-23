@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { USER_REPOSITORY } from '../common/constants/constants';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entities';
@@ -25,7 +25,7 @@ export class UsersService {
 
   async findById(id: number): Promise<User> {
     try {
-      const user = await this.repo.findOneBy({ id });
+      const user = await this.repo.findOneByOrFail({ id });
       return user;
     } catch (e) {
       throw new UserNotFoundException();
@@ -34,7 +34,7 @@ export class UsersService {
 
   async findByEmail(email: string): Promise<User> {
     try {
-      const user = await this.repo.findOneBy({ email });
+      const user = await this.repo.findOneByOrFail({ email });
       return user;
     } catch (e) {
       throw new UserNotFoundException();
@@ -43,26 +43,32 @@ export class UsersService {
 
   async findByUsername(username: string): Promise<User> {
     try {
-      const user = await this.repo.findOneBy({ username });
+      const user = await this.repo.findOneByOrFail({ username });
       return user;
     } catch (e) {
       throw new UserNotFoundException();
     }
   }
   async validateEmailDuplicate(email: string): Promise<Error> {
-    const user = await this.findByEmail(email);
-    if (user !== null) {
-      return new EmailInUseException();
+    try {
+      const user = await this.findByEmail(email);
+      if (user !== null) {
+        return new EmailInUseException();
+      }
+    } catch (error) {
+      return null;
     }
-    return null;
   }
 
   async validateUsernameDuplicate(email: string): Promise<Error> {
-    const user = await this.findByEmail(email);
-    if (user !== null) {
-      return new UsernameInUseException();
+    try {
+      const user = await this.findByEmail(email);
+      if (user !== null) {
+        return new UsernameInUseException();
+      }
+    } catch (error) {
+      return null;
     }
-    return null;
   }
   async create(dto: CreateUserDTO): Promise<User> {
     try {
@@ -76,22 +82,38 @@ export class UsersService {
       await this.repo.save(newUser);
       return newUser;
     } catch (error) {
+      if (
+        !(error instanceof EmailInUseException) &&
+        !(error instanceof UsernameInUseException)
+      ) {
+        throw new InternalServerException();
+      }
       throw error;
     }
   }
 
   async update(dto: UpdateUserDTO): Promise<User> {
     try {
-      let err = await this.validateEmailDuplicate(dto.email);
-      if (err !== null) throw err;
+      if (dto.email !== null) {
+        let err = await this.validateEmailDuplicate(dto.email);
+        if (err !== null) throw err;
+      }
 
-      err = await this.validateUsernameDuplicate(dto.email);
-      if (err !== null) throw err;
+      if (dto.username !== null) {
+        let err = await this.validateUsernameDuplicate(dto.email);
+        if (err !== null) throw err;
+      }
 
       const user = await this.repo.save({ id: dto.id, ...dto });
 
       return user;
     } catch (error) {
+      if (
+        !(error instanceof EmailInUseException) &&
+        !(error instanceof UsernameInUseException)
+      ) {
+        throw new InternalServerException();
+      }
       throw error;
     }
   }

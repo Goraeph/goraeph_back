@@ -68,11 +68,11 @@ describe('UserService Unit Test', () => {
 
   describe('findById()', () => {
     it('should occur error when findOneBy() goes wrong.', async () => {
-      repo.findOneBy.mockRejectedValue('error');
+      repo.findOneByOrFail.mockRejectedValue('error');
       try {
         const _ = await userService.findById(1);
       } catch (e) {
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(e).toStrictEqual(new UserNotFoundException());
       }
     });
@@ -87,7 +87,7 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
 
       const users = await userService.findById(1);
 
@@ -98,11 +98,11 @@ describe('UserService Unit Test', () => {
 
   describe('findByEmail()', () => {
     it('should occur error when findOneBy() goes wrong.', async () => {
-      repo.findOneBy.mockRejectedValue('error');
+      repo.findOneByOrFail.mockRejectedValue('error');
       try {
         const _ = await userService.findByEmail('');
       } catch (e) {
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(e).toStrictEqual(new UserNotFoundException());
       }
     });
@@ -117,7 +117,7 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
 
       const users = await userService.findByEmail('');
 
@@ -136,25 +136,25 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
 
       const err = await userService.validateEmailDuplicate('');
 
-      expect(repo.findOneBy).toHaveBeenCalled();
+      expect(repo.findOneByOrFail).toHaveBeenCalled();
       expect(err).toStrictEqual(new EmailInUseException());
     });
 
     it('should return null when cannot find user', async () => {
-      repo.findOneBy.mockResolvedValue(null);
+      repo.findOneByOrFail.mockRejectedValue('error');
 
       const err = await userService.validateEmailDuplicate('');
 
-      expect(repo.findOneBy).toHaveBeenCalled();
+      expect(repo.findOneByOrFail).toHaveBeenCalled();
       expect(err).toEqual(null);
     });
   });
   describe('validateUsernameDuplicate()', () => {
-    it('should return error when find user', async () => {
+    it('should return valid error when find user', async () => {
       const mockUser: User = {
         id: 1,
         username: '1',
@@ -164,19 +164,19 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
 
       const err = await userService.validateUsernameDuplicate('');
 
-      expect(repo.findOneBy).toHaveBeenCalled();
+      expect(repo.findOneByOrFail).toHaveBeenCalled();
       expect(err).toStrictEqual(new UsernameInUseException());
     });
     it('should return null when cannot find user', async () => {
-      repo.findOneBy.mockResolvedValue(null);
+      repo.findOneByOrFail.mockRejectedValue('error');
 
       const err = await userService.validateUsernameDuplicate('');
 
-      expect(repo.findOneBy).toHaveBeenCalled();
+      expect(repo.findOneByOrFail).toHaveBeenCalled();
       expect(err).toEqual(null);
     });
   });
@@ -193,7 +193,7 @@ describe('UserService Unit Test', () => {
       } catch (error) {
         expect(repo.create).toHaveBeenCalled();
         expect(repo.save).toHaveBeenCalled();
-        expect(error).toEqual('error');
+        expect(error).toEqual(new InternalServerException());
       }
     });
     it('should validate duplicate username', async () => {
@@ -206,7 +206,7 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
       try {
         const result = await userService.create({
           username: '1',
@@ -215,7 +215,7 @@ describe('UserService Unit Test', () => {
           isActivated: true,
         });
       } catch (error) {
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(error).toBeDefined();
       }
     });
@@ -229,7 +229,7 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
       try {
         const result = await userService.create({
           username: '',
@@ -238,7 +238,7 @@ describe('UserService Unit Test', () => {
           isActivated: true,
         });
       } catch (error) {
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(error).toBeDefined();
       }
     });
@@ -252,7 +252,7 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(null);
+      repo.findOneByOrFail.mockResolvedValue(null);
       repo.create.mockReturnValue(mockUser);
       repo.save.mockResolvedValue(mockUser);
       try {
@@ -262,7 +262,7 @@ describe('UserService Unit Test', () => {
           password: '',
           isActivated: true,
         });
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(repo.create).toHaveBeenCalled();
         expect(repo.save).toHaveBeenCalled();
         expect(newUser).toEqual(mockUser);
@@ -272,11 +272,11 @@ describe('UserService Unit Test', () => {
 
   describe('update()', () => {
     it('should occur error when findById() goes wrong.', async () => {
-      repo.findOneBy.mockRejectedValue('error');
+      repo.findOneByOrFail.mockRejectedValue('error');
       try {
         const _ = await userService.update({ id: 1, username: '' });
       } catch (error) {
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(error).toBeDefined();
       }
     });
@@ -290,14 +290,14 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
       try {
         const result = await userService.update({
           id: 1,
           username: '1',
         });
       } catch (error) {
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(error).toBeDefined();
       }
     });
@@ -311,14 +311,14 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
       try {
         const result = await userService.update({
           id: 1,
           email: '1@a.com',
         });
       } catch (error) {
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(error).toBeDefined();
       }
     });
@@ -333,7 +333,7 @@ describe('UserService Unit Test', () => {
         updatedAt: new Date(),
       };
 
-      repo.findOneBy.mockResolvedValue(null);
+      repo.findOneByOrFail.mockRejectedValue('error');
 
       const updatedMockUser = mockUser;
 
@@ -348,12 +348,12 @@ describe('UserService Unit Test', () => {
 
   describe('delete()', () => {
     it("should occur error when can't find user ", async () => {
-      repo.findOneBy.mockResolvedValue(null);
+      repo.findOneByOrFail.mockResolvedValue(null);
 
       try {
         const user = await userService.delete(1);
       } catch (error) {
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(error).toBeDefined();
       }
     });
@@ -367,12 +367,12 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
       repo.remove.mockRejectedValue('error');
       try {
         const user = await userService.delete(1);
       } catch (error) {
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(repo.remove).toHaveBeenCalled();
         expect(error).toBeDefined();
       }
@@ -387,12 +387,12 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      repo.findOneBy.mockResolvedValue(mockUser);
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
       repo.remove.mockResolvedValue(mockUser);
       try {
         const user = await userService.delete(1);
         expect(user).toEqual(mockUser);
-        expect(repo.findOneBy).toHaveBeenCalled();
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(repo.remove).toHaveBeenCalled();
       } catch (error) {}
     });
