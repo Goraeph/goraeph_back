@@ -126,7 +126,7 @@ export class UsersController {
   async updateUser(@Param('id') id: number, @Body() body: UpdateUserDTO) {
     console.log(body);
     try {
-      return await this.userService.update(body);
+      return await this.userService.update(id, body);
     } catch (error) {
       throw error;
     }

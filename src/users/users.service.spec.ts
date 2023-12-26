@@ -274,7 +274,7 @@ describe('UserService Unit Test', () => {
     it('should occur error when findById() goes wrong.', async () => {
       repo.findOneByOrFail.mockRejectedValue('error');
       try {
-        const _ = await userService.update({ id: 1, username: '' });
+        const _ = await userService.update(1, { username: '' });
       } catch (error) {
         expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(error).toBeDefined();
@@ -292,10 +292,7 @@ describe('UserService Unit Test', () => {
       };
       repo.findOneByOrFail.mockResolvedValue(mockUser);
       try {
-        const result = await userService.update({
-          id: 1,
-          username: '1',
-        });
+        const result = await userService.update(1, { username: '1' });
       } catch (error) {
         expect(repo.findOneByOrFail).toHaveBeenCalled();
         expect(error).toBeDefined();
@@ -313,8 +310,7 @@ describe('UserService Unit Test', () => {
       };
       repo.findOneByOrFail.mockResolvedValue(mockUser);
       try {
-        const result = await userService.update({
-          id: 1,
+        const result = await userService.update(1, {
           email: '1@a.com',
         });
       } catch (error) {
@@ -332,15 +328,14 @@ describe('UserService Unit Test', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-
-      repo.findOneByOrFail.mockRejectedValue('error');
+      repo.findOneByOrFail.mockResolvedValue(mockUser);
 
       const updatedMockUser = mockUser;
 
       updatedMockUser.username = 'test';
       repo.save.mockResolvedValue(updatedMockUser);
 
-      const updatedUser = await userService.update({ id: 1, username: 'test' });
+      const updatedUser = await userService.update(1, { username: 'test' });
 
       expect(updatedUser.username).toEqual('test');
     });

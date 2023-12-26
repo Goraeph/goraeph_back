@@ -72,11 +72,8 @@ export class UsersService {
   }
   async create(dto: CreateUserDTO): Promise<User> {
     try {
-      let err = await this.validateEmailDuplicate(dto.email);
-      if (err !== null) throw err;
-
-      err = await this.validateUsernameDuplicate(dto.email);
-      if (err !== null) throw err;
+      await this.validateEmailDuplicate(dto.email);
+      await this.validateUsernameDuplicate(dto.email);
 
       const newUser = this.repo.create(dto);
       await this.repo.save(newUser);
@@ -92,22 +89,22 @@ export class UsersService {
     }
   }
 
-  async update(dto: UpdateUserDTO): Promise<User> {
+  async update(id: number, dto: UpdateUserDTO): Promise<User> {
     try {
       if (dto.email !== null) {
-        let err = await this.validateEmailDuplicate(dto.email);
-        if (err !== null) throw err;
+        await this.validateEmailDuplicate(dto.email);
       }
 
       if (dto.username !== null) {
-        let err = await this.validateUsernameDuplicate(dto.email);
-        if (err !== null) throw err;
+        await this.validateUsernameDuplicate(dto.email);
       }
+      const existedUser = await this.findById(id);
+      Object.assign(existedUser, dto);
+      await this.repo.save(existedUser);
 
-      const user = await this.repo.save({ id: dto.id, ...dto });
-
-      return user;
+      return existedUser;
     } catch (error) {
+      console.log(error);
       if (
         !(error instanceof EmailInUseException) &&
         !(error instanceof UsernameInUseException)
