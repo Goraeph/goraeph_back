@@ -10,7 +10,7 @@ import {
 import { BaseException } from '../interfaces/base.exception.interface';
 import { DateFormatEnum, format } from '../enums/date-format.enum';
 import { ValidationError } from 'class-validator';
-import { FieldInvalidException } from '../exceptions/auth.exception';
+import { FieldInvalidException } from '../exceptions/user.exception';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {

@@ -9,7 +9,7 @@ import {
   EmailInUseException,
   UserNotFoundException,
   UsernameInUseException,
-} from '../common/exceptions/auth.exception';
+} from '../common/exceptions/user.exception';
 
 @Injectable()
 export class UsersService {
