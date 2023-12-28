@@ -1,1 +1,37 @@
-GET http://localhost:3000/users
+GET http://localhost:3000/api/v1/users
+
+###
+GET http://localhost:3000/api/v1/users/17
+
+###
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "username": "asdasd",
+  "email": "test@naver.com",
+  "isActivated": true,
+  "profileImg": "some url",
+  "birthDate": "2023-12-23T07:01:45.001Z",
+  "isPermissionedAdult": true,
+  "password": "12345678"
+}
+
+###
+PUT http://localhost:3000/api/v1/users/2
+Content-Type: application/json
+
+{
+  "profileImg":"updating!"
+}
+
+###
+PUT http://localhost:3000/api/v1/users/1
+Content-Type: application/json
+
+{
+  "password":"123"
+}
+
+###
+DELETE http://localhost:3000/api/v1/users/5
