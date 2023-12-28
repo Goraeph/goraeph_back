@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import * as joi from 'joi';
 import { databaseProviders } from './database/database.providers';
 import { CommonModule } from './common/common.module';
+import { JwtModule } from './jwt/jwt.module';
 @Module({
   imports: [
     UsersModule,
@@ -18,9 +19,13 @@ import { CommonModule } from './common/common.module';
         DATABASE_USERNAME: joi.string().required(),
         DATABASE_PASSWORD: joi.string().required(),
         DATABASE_NAME: joi.string().required(),
+        JWT_SECRET_KEY: joi.string().required(),
       }),
     }),
     CommonModule,
+    JwtModule.forRoot({
+      secretKey: process.env.JWT_SECRET_KEY,
+    }),
   ],
   controllers: [],
   providers: [...databaseProviders],
