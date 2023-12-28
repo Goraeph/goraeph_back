@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
   ApiBody,
@@ -9,16 +18,18 @@ import {
   ApiResponseProperty,
   ApiTags,
 } from '@nestjs/swagger';
-import { User } from './entities/user.entities';
-import { BaseException } from 'src/common/interfaces/base.exception.interface';
+import { BaseException } from '../common/interfaces/base.exception.interface';
 import { PublicUserProfileDTO } from './dtos/public-user-profile.dto';
-import { UserSerializer } from './interceptors/serializer';
+import { UserSerializer } from './interceptors/serializer.interceptor';
 import { CreateUserDTO } from './dtos/create-user.dto';
-import { HashPassword } from './interceptors/hash-password';
+import { HashPassword } from './interceptors/hash-password.interceptor';
 import { UpdateUserDTO } from './dtos/update-user.dto';
+import { ResponseSerializer } from '../common/interceptors/response.interceptor';
+import { ResponseDTO } from '../common/dtos/response.dto';
 
 @Controller('users')
 @ApiTags('users')
+@ResponseSerializer()
 export class UsersController {
   constructor(private userService: UsersService) {}
   @Get()
@@ -26,7 +37,7 @@ export class UsersController {
   @ApiResponse({
     description:
       'view all user. this feature intended to only using in development. DO NOT USE ON PRODUCTION LEVEL.',
-    type: User,
+    type: ResponseDTO,
     status: 200,
   })
   @ApiResponse({
@@ -47,7 +58,7 @@ export class UsersController {
   @ApiParam({ name: 'id', type: 'number', description: "user's id" })
   @ApiResponse({
     description: "View one user's public profile",
-    type: PublicUserProfileDTO,
+    type: ResponseDTO,
     status: 200,
   })
   @ApiResponse({
@@ -70,7 +81,7 @@ export class UsersController {
   @ApiResponse({
     description:
       'Create User on development level. DO NOT USE ON PRODUCTION LEVEL.',
-    type: User,
+    type: ResponseDTO,
     status: 200,
   })
   @ApiResponse({
@@ -90,7 +101,6 @@ export class UsersController {
   })
   @HashPassword()
   async createUser(@Body() body: CreateUserDTO) {
-    console.log(body);
     try {
       return await this.userService.create(body);
     } catch (error) {
@@ -104,7 +114,7 @@ export class UsersController {
   @ApiParam({ name: 'id', type: 'number', description: "user's id" })
   @ApiResponse({
     description: 'Update User Profile',
-    type: User,
+    type: ResponseDTO,
     status: 200,
   })
   @ApiResponse({
@@ -124,9 +134,34 @@ export class UsersController {
   })
   @HashPassword()
   async updateUser(@Param('id') id: number, @Body() body: UpdateUserDTO) {
-    console.log(body);
     try {
       return await this.userService.update(id, body);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @Delete('/:id')
+  @ApiOperation({ summary: 'Delete User' })
+  @ApiParam({ name: 'id', type: 'number', description: "user's id" })
+  @ApiResponse({
+    description: 'Delete User',
+    type: ResponseDTO,
+    status: 200,
+  })
+  @ApiResponse({
+    description: 'failed when cannot find user.',
+    type: BaseException,
+    status: 404,
+  })
+  @ApiResponse({
+    description: 'failed when something goes wrong while deleting user',
+    type: BaseException,
+    status: 500,
+  })
+  async deleteUser(@Param('id') id: number) {
+    try {
+      return await this.userService.delete(id);
     } catch (error) {
       throw error;
     }

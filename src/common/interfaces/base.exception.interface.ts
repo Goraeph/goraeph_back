@@ -15,6 +15,9 @@ export class BaseException extends HttpException implements IBaseException {
     this.errorCode = errorCode;
     this.statusCode = statusCode;
   }
+
+  @ApiProperty()
+  ok: boolean;
   @ApiProperty()
   errorCode: string;
 

@@ -8,7 +8,7 @@ import {
   IsString,
   MinLength,
 } from 'class-validator';
-import { Common } from 'src/common/entities/common.entities';
+import { Common } from '../../common/entities/common.entities';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

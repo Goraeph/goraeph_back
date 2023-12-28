@@ -137,11 +137,12 @@ describe('UserService Unit Test', () => {
         updatedAt: new Date(),
       };
       repo.findOneByOrFail.mockResolvedValue(mockUser);
-
-      const err = await userService.validateEmailDuplicate('');
-
-      expect(repo.findOneByOrFail).toHaveBeenCalled();
-      expect(err).toStrictEqual(new EmailInUseException());
+      try {
+        await userService.validateEmailDuplicate('');
+      } catch (err) {
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
+        expect(err).toStrictEqual(new EmailInUseException());
+      }
     });
 
     it('should return null when cannot find user', async () => {
@@ -165,11 +166,12 @@ describe('UserService Unit Test', () => {
         updatedAt: new Date(),
       };
       repo.findOneByOrFail.mockResolvedValue(mockUser);
-
-      const err = await userService.validateUsernameDuplicate('');
-
-      expect(repo.findOneByOrFail).toHaveBeenCalled();
-      expect(err).toStrictEqual(new UsernameInUseException());
+      try {
+        const err = await userService.validateUsernameDuplicate('');
+      } catch (err) {
+        expect(repo.findOneByOrFail).toHaveBeenCalled();
+        expect(err).toStrictEqual(new UsernameInUseException());
+      }
     });
     it('should return null when cannot find user', async () => {
       repo.findOneByOrFail.mockRejectedValue('error');

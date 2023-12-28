@@ -21,9 +21,11 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     const res = exception;
     if (res instanceof BaseException) {
+      res.ok = false;
       res.timeStamp = format(DateFormatEnum.Datetime);
       res.path = request.path;
       response.status(res.statusCode).json({
+        ok: res.ok,
         errorCode: res.errorCode,
         statusCode: res.statusCode,
         timeStamp: res.timeStamp,
@@ -39,10 +41,12 @@ export class AllExceptionFilter implements ExceptionFilter {
     } else if (res instanceof BadRequestException) {
       const message = res['response'].message[0];
       const invalidFieldException = new FieldInvalidException();
+      invalidFieldException.ok = false;
       invalidFieldException.msg = message;
       invalidFieldException.timeStamp = format(DateFormatEnum.Datetime);
 
       response.status(HttpStatus.BAD_REQUEST).json({
+        ok: invalidFieldException.ok,
         errorCode: invalidFieldException.errorCode,
         statusCode: invalidFieldException.statusCode,
         timeStamp: invalidFieldException.timeStamp,

@@ -49,22 +49,22 @@ export class UsersService {
       throw new UserNotFoundException();
     }
   }
-  async validateEmailDuplicate(email: string): Promise<Error> {
+  async validateEmailDuplicate(email: string) {
     try {
       const user = await this.findByEmail(email);
       if (user !== null) {
-        return new EmailInUseException();
+        throw new EmailInUseException();
       }
     } catch (error) {
       return null;
     }
   }
 
-  async validateUsernameDuplicate(email: string): Promise<Error> {
+  async validateUsernameDuplicate(email: string) {
     try {
       const user = await this.findByEmail(email);
       if (user !== null) {
-        return new UsernameInUseException();
+        throw new UsernameInUseException();
       }
     } catch (error) {
       return null;
@@ -104,10 +104,10 @@ export class UsersService {
 
       return existedUser;
     } catch (error) {
-      console.log(error);
       if (
         !(error instanceof EmailInUseException) &&
-        !(error instanceof UsernameInUseException)
+        !(error instanceof UsernameInUseException) &&
+        !(error instanceof UserNotFoundException)
       ) {
         throw new InternalServerException();
       }
