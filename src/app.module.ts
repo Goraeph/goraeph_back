@@ -8,7 +8,8 @@ import { CommonModule } from './common/common.module';
 import { JwtModule } from './jwt/jwt.module';
 import { CurrentUserMiddleware } from './common/middlewares/current-user.middleware';
 import { JwtService } from './jwt/jwt.service';
-import { JWT_OPTIONS } from './common/constants/constants';
+import { UsersService } from './users/users.service';
+import { MailModule } from './mail/mail.module';
 @Module({
   imports: [
     UsersModule,
@@ -29,9 +30,10 @@ import { JWT_OPTIONS } from './common/constants/constants';
     JwtModule.forRoot({
       secretKey: process.env.JWT_SECRET_KEY,
     }),
+    MailModule,
   ],
   controllers: [],
-  providers: [...databaseProviders, JwtService],
+  providers: [...databaseProviders, JwtService, UsersService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
