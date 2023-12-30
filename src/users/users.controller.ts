@@ -26,7 +26,7 @@ import { HashPassword } from './interceptors/hash-password.interceptor';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 import { ResponseSerializer } from '../common/interceptors/response.interceptor';
 import { ResponseDTO } from '../common/dtos/response.dto';
-
+import { JwtService } from 'src/jwt/jwt.service';
 @Controller('users')
 @ApiTags('users')
 @ResponseSerializer()
@@ -166,4 +166,7 @@ export class UsersController {
       throw error;
     }
   }
+
+  @Get('/test')
+  async testCurrentUser() {}
 }

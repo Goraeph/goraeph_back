@@ -55,10 +55,10 @@ describe('JwtService', () => {
     });
   });
 
-  describe('parseToken()', () => {
+  describe('parseHeader()', () => {
     it('should parse header', async () => {
       const header = 'Authorization : Bearer sometoken';
-      const token = await service.parseToken(header);
+      const token = await service.parseHeader(header);
       expect(token).toEqual('sometoken');
     });
   });
