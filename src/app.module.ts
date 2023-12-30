@@ -35,6 +35,6 @@ import { JWT_OPTIONS } from './common/constants/constants';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CurrentUserMiddleware).forRoutes('users');
+    consumer.apply(CurrentUserMiddleware).forRoutes('*');
   }
 }
