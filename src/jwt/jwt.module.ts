@@ -5,6 +5,7 @@ import { JwtOptions } from './jwt.options.interface';
 
 @Module({
   providers: [JwtService],
+  exports: [JWT_OPTIONS],
 })
 export class JwtModule {
   static forRoot(options: JwtOptions): DynamicModule {

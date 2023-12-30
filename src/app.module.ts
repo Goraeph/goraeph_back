@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
@@ -6,6 +6,9 @@ import * as joi from 'joi';
 import { databaseProviders } from './database/database.providers';
 import { CommonModule } from './common/common.module';
 import { JwtModule } from './jwt/jwt.module';
+import { CurrentUserMiddleware } from './common/middlewares/current-user.middleware';
+import { JwtService } from './jwt/jwt.service';
+import { JWT_OPTIONS } from './common/constants/constants';
 @Module({
   imports: [
     UsersModule,
@@ -28,6 +31,10 @@ import { JwtModule } from './jwt/jwt.module';
     }),
   ],
   controllers: [],
-  providers: [...databaseProviders],
+  providers: [...databaseProviders, JwtService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CurrentUserMiddleware).forRoutes('*');
+  }
+}
