@@ -36,7 +36,7 @@
     "joi": "^17.11.0",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.29.4",
-    "nodemailer": "^6.9.7",
+    "nodemailer": "^6.9.8",
     "pg": "^8.11.3",
     "postgresql": "^0.0.1",
     "reflect-metadata": "^0.1.13",

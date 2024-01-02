@@ -23,12 +23,16 @@ import { HashPassword } from './interceptors/hash-password.interceptor';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 import { ResponseSerializer } from '../common/interceptors/response.interceptor';
 import { ResponseDTO } from '../common/dtos/response.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Controller('users')
 @ApiTags('users')
 @ResponseSerializer()
 export class UsersController {
-  constructor(private userService: UsersService) {}
+  constructor(
+    private userService: UsersService,
+    private mailService: MailService,
+  ) {}
   @Get()
   @ApiOperation({ summary: 'View All Users' })
   @ApiResponse({

@@ -4,8 +4,9 @@ import { UsersController } from './users.controller';
 import { userProviders } from './users.providers';
 import { DatabaseModule } from 'src/database/database.module';
 import { USER_REPOSITORY } from 'src/common/constants/constants';
+import { MailModule } from 'src/mail/mail.module';
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, MailModule],
   exports: [UsersModule, USER_REPOSITORY],
   providers: [UsersService, ...userProviders],
 
