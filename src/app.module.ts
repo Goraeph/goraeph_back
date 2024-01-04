@@ -11,6 +11,7 @@ import { JwtService } from './jwt/jwt.service';
 import { UsersService } from './users/users.service';
 import { MailModule } from './mail/mail.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     UsersModule,
@@ -48,6 +49,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
       senderMail: process.env.SMTP_SENDER_EMAIL,
       senderName: process.env.SMTP_SENDER_NAME,
     }),
+    AuthModule,
   ],
   controllers: [],
   providers: [...databaseProviders, JwtService, UsersService],

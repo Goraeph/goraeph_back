@@ -1,4 +1,4 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { USER_REPOSITORY } from '../common/constants/constants';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entities';

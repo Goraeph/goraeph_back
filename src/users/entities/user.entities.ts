@@ -2,14 +2,13 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 import {
   IsBoolean,
-  IsDate,
   IsDateString,
   IsEmail,
   IsString,
   MinLength,
 } from 'class-validator';
 import { Common } from '../../common/entities/common.entities';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 
 @Entity()
 export class User extends Common {

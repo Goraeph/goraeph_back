@@ -17,6 +17,8 @@ export class JwtModule {
           useValue: options,
         },
       ],
+      global: true,
+      exports: [JwtModule],
     };
   }
 }

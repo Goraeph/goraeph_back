@@ -7,7 +7,7 @@ import { USER_REPOSITORY } from 'src/common/constants/constants';
 import { MailModule } from 'src/mail/mail.module';
 @Module({
   imports: [DatabaseModule, MailModule],
-  exports: [UsersModule, USER_REPOSITORY],
+  exports: [UsersModule, USER_REPOSITORY, UsersService],
   providers: [UsersService, ...userProviders],
 
   controllers: [UsersController],
