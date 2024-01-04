@@ -8,7 +8,9 @@ import { CommonModule } from './common/common.module';
 import { JwtModule } from './jwt/jwt.module';
 import { CurrentUserMiddleware } from './common/middlewares/current-user.middleware';
 import { JwtService } from './jwt/jwt.service';
-import { JWT_OPTIONS } from './common/constants/constants';
+import { UsersService } from './users/users.service';
+import { MailModule } from './mail/mail.module';
+import { MailerModule } from '@nestjs-modules/mailer';
 @Module({
   imports: [
     UsersModule,
@@ -23,15 +25,32 @@ import { JWT_OPTIONS } from './common/constants/constants';
         DATABASE_PASSWORD: joi.string().required(),
         DATABASE_NAME: joi.string().required(),
         JWT_SECRET_KEY: joi.string().required(),
+        SMTP_USER: joi.string().required(),
+        SMTP_PASSWORD: joi.string().required(),
+        SMTP_DOMAIN: joi.string().required(),
+        SMTP_SENDER_EMAIL: joi.string().required(),
+        SMTP_SENDER_NAME: joi.string().required(),
       }),
     }),
     CommonModule,
     JwtModule.forRoot({
       secretKey: process.env.JWT_SECRET_KEY,
     }),
+    MailerModule.forRootAsync({
+      useFactory: () => ({
+        transport: `smtps://${process.env.SMTP_USER}:${process.env.SMTP_PASSWORD}@${process.env.SMTP_DOMAIN}`,
+        defaults: {
+          from: `"${process.env.SMTP_SENDER_NAME} <${process.env.SMTP_SENDER_EMAIL}>"`,
+        },
+      }),
+    }),
+    MailModule.forRoot({
+      senderMail: process.env.SMTP_SENDER_EMAIL,
+      senderName: process.env.SMTP_SENDER_NAME,
+    }),
   ],
   controllers: [],
-  providers: [...databaseProviders, JwtService],
+  providers: [...databaseProviders, JwtService, UsersService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
