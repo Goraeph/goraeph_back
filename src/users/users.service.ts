@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { USER_REPOSITORY } from '../common/constants/constants';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entities';
+import { User } from './entities/user.entity';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 import { InternalServerException } from '../common/exceptions/internal.exception';
@@ -79,6 +79,7 @@ export class UsersService {
       await this.repo.save(newUser);
       return newUser;
     } catch (error) {
+      console.log(error);
       if (
         !(error instanceof EmailInUseException) &&
         !(error instanceof UsernameInUseException)

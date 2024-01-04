@@ -1,7 +1,6 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
 import { Repository } from 'typeorm';
-import { User } from './entities/user.entities';
+import { User } from './entities/user.entity';
 import { TestBed } from '@automock/jest';
 import { USER_REPOSITORY } from '../common/constants/constants';
 import { InternalServerException } from '../common/exceptions/internal.exception';

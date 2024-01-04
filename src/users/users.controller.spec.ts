@@ -1,7 +1,7 @@
 import { TestBed } from '@automock/jest';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { User } from './entities/user.entities';
+import { User } from './entities/user.entity';
 import { CreateUserDTO } from './dtos/create-user.dto';
 import { UpdateUserDTO } from './dtos/update-user.dto';
 

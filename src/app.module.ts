@@ -12,6 +12,7 @@ import { UsersService } from './users/users.service';
 import { MailModule } from './mail/mail.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { AuthModule } from './auth/auth.module';
+import { TokenModule } from './token/token.module';
 @Module({
   imports: [
     UsersModule,
@@ -50,12 +51,13 @@ import { AuthModule } from './auth/auth.module';
       senderName: process.env.SMTP_SENDER_NAME,
     }),
     AuthModule,
+    TokenModule,
   ],
   controllers: [],
   providers: [...databaseProviders, JwtService, UsersService],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(CurrentUserMiddleware).forRoutes('*');
+    //consumer.apply(CurrentUserMiddleware).forRoutes('*');
   }
 }

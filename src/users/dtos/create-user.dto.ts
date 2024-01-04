@@ -1,5 +1,5 @@
-import { OmitType, PartialType, PickType } from '@nestjs/swagger';
-import { User } from '../entities/user.entities';
+import { OmitType } from '@nestjs/swagger';
+import { User } from '../entities/user.entity';
 
 export class CreateUserDTO extends OmitType(User, [
   'id',

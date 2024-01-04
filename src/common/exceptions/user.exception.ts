@@ -1,7 +1,6 @@
 import { HttpStatus } from '@nestjs/common';
 import { UserExceptionCodeEnum } from '../enums/exceptions.enum';
 import { BaseException } from '../interfaces/base.exception.interface';
-import { ValidationError } from 'class-validator';
 
 export class UserNotFoundException extends BaseException {
   constructor() {

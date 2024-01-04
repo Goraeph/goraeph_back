@@ -10,6 +10,15 @@ export enum UserExceptionCodeEnum {
 export enum JwtExceptionCodeEnum {
   JWTVerifyFailed = '1001',
 }
+export enum AuthExceptionCodeEnum {
+  VerificationNotFound = '2001',
+  VerificationExpired = '2002',
+}
+
+export enum TokenExceptionCodeEnum {
+  TokenNotFound = '3001',
+}
+
 export enum NestExceptionCodeEnum {
   PageNotFound = '0050',
 }

@@ -5,8 +5,8 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
-import { ClassConstructor, plainToInstance } from 'class-transformer';
-import { User } from '../entities/user.entities';
+import { plainToInstance } from 'class-transformer';
+import { User } from '../entities/user.entity';
 
 export function UserSerializer(dto: any) {
   return UseInterceptors(new SerializeUserInterceptor(dto));

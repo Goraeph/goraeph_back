@@ -8,7 +8,8 @@ import {
   MinLength,
 } from 'class-validator';
 import { Common } from '../../common/entities/common.entities';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, OneToOne } from 'typeorm';
+import { Token } from '../../token/entities/token.entity';
 
 @Entity()
 export class User extends Common {
@@ -51,4 +52,10 @@ export class User extends Common {
   @IsString()
   @ApiProperty()
   password: string;
+
+  @OneToOne(() => Token, (token) => token.user, {
+    onDelete: 'CASCADE',
+    nullable: true,
+  })
+  token?: Token;
 }
