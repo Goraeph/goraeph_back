@@ -1,10 +1,11 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { TOKEN_REPOSITORY } from '../common/constants/constants';
 import { Repository } from 'typeorm';
 import { Token } from './entities/token.entity';
 import { User } from '../users/entities/user.entity';
 import { UpdateTokenDTO } from './dtos/update-token.dto';
 import { InternalServerException } from '../common/exceptions/internal.exception';
+import { TokenNotFoundException } from '../common/exceptions/token.exception';
 
 @Injectable()
 export class TokenService {
@@ -24,18 +25,21 @@ export class TokenService {
       const token = await this.tokenRepo.findOneBy({ user });
       Object.assign(token, dto);
 
-      await this.tokenRepo.save(token);
-      return token;
+      const updatedToken = await this.tokenRepo.save(token);
+      return updatedToken;
     } catch (error) {
-      throw new InternalServerException();
+      if (!(error instanceof NotFoundException)) {
+        throw new InternalServerException();
+      }
+      throw new TokenNotFoundException();
     }
   }
 
   async delete(user: User) {
     try {
-      const deletedToken = await this.tokenRepo.delete({ user });
+      await this.tokenRepo.delete({ user });
 
-      return deletedToken;
+      return true;
     } catch (error) {
       throw new InternalServerException();
     }
@@ -46,7 +50,7 @@ export class TokenService {
       const token = await this.tokenRepo.findOneBy({ user });
       return token;
     } catch (error) {
-      throw error;
+      throw new TokenNotFoundException();
     }
   }
 }
