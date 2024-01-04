@@ -5,6 +5,7 @@ import { DatabaseModule } from 'src/database/database.module';
 
 @Module({
   providers: [TokenService, ...tokenProvider],
+  exports: [TokenModule],
   imports: [DatabaseModule],
 })
 export class TokenModule {}

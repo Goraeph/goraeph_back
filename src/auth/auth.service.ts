@@ -15,6 +15,7 @@ import { CreateUserDTO } from 'src/users/dtos/create-user.dto';
 import { SigninDTO } from './dtos/signin.dto';
 import { SigninOutputDTO } from './dtos/signin-output.dto';
 import { JWTExpireTimeEnum } from 'src/common/enums/jwt-expire-time.enum';
+import { TokenService } from '../token/token.service';
 @Injectable()
 export class AuthService {
   constructor(
@@ -23,6 +24,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly mailService: MailService,
     private readonly userService: UsersService,
+    private readonly tokenService: TokenService,
   ) {}
 
   async sendVerification(email: string): Promise<Verification> {
@@ -95,6 +97,7 @@ export class AuthService {
         JWTExpireTimeEnum.REFRESH_TOKEN_EXPIRY_TIME,
       );
 
+      await this.tokenService.create(refreshToken, user);
       return {
         accessToken,
         refreshToken,
