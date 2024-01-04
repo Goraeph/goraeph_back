@@ -1,20 +1,20 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { VERIFICATION_REPOSITORY } from 'src/common/constants/constants';
-import { JwtService } from 'src/jwt/jwt.service';
-import { MailService } from 'src/mail/mail.service';
-import { UsersService } from 'src/users/users.service';
+import { VERIFICATION_REPOSITORY } from '../common/constants/constants';
+import { JwtService } from '../jwt/jwt.service';
+import { MailService } from '../mail/mail.service';
+import { UsersService } from '../users/users.service';
 import { Repository } from 'typeorm';
 import { Verification } from './entities/verification.entity';
-import { InternalServerException } from 'src/common/exceptions/internal.exception';
+import { InternalServerException } from '../common/exceptions/internal.exception';
 import { v4 as uuidv4 } from 'uuid';
 import {
   VerificationExpired,
   VerificationNotFound,
-} from 'src/common/exceptions/auth.exception';
-import { CreateUserDTO } from 'src/users/dtos/create-user.dto';
+} from '../common/exceptions/auth.exception';
+import { CreateUserDTO } from '../users/dtos/create-user.dto';
 import { SigninDTO } from './dtos/signin.dto';
 import { SigninOutputDTO } from './dtos/signin-output.dto';
-import { JWTExpireTimeEnum } from 'src/common/enums/jwt-expire-time.enum';
+import { JWTExpireTimeEnum } from '../common/enums/jwt-expire-time.enum';
 import { TokenService } from '../token/token.service';
 @Injectable()
 export class AuthService {
@@ -109,7 +109,8 @@ export class AuthService {
 
   async signUp(dto: CreateUserDTO) {
     try {
-      await this.userService.create(dto);
+      const newUser = await this.userService.create(dto);
+      return newUser;
     } catch (error) {
       throw error;
     }

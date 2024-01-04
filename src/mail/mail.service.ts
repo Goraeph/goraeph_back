@@ -1,8 +1,8 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Inject, Injectable } from '@nestjs/common';
-import { MAIL_OPTIONS } from 'src/common/constants/constants';
+import { MAIL_OPTIONS } from '../common/constants/constants';
 import { MailOptions } from './mail.interfaces';
-import { InternalServerException } from 'src/common/exceptions/internal.exception';
+import { InternalServerException } from '../common/exceptions/internal.exception';
 
 @Injectable()
 export class MailService {
