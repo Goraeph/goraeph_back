@@ -1,4 +1,3 @@
-import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from './jwt.service';
 import { JwtOptions } from './jwt.options.interface';
 import { TestBed } from '@automock/jest';
