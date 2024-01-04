@@ -5,7 +5,7 @@ import { MAIL_OPTIONS } from 'src/common/constants/constants';
 
 @Module({
   providers: [MailService],
-  exports: [MailModule],
+  exports: [MailModule, MailService],
 })
 export class MailModule {
   static forRoot(options: MailOptions): DynamicModule {
@@ -16,7 +16,10 @@ export class MailModule {
           provide: MAIL_OPTIONS,
           useValue: options,
         },
+        MailService,
       ],
+      global: true,
+      exports: [MailModule, MAIL_OPTIONS],
     };
   }
 }
