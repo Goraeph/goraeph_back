@@ -51,6 +51,8 @@ export class AuthService {
   async createVerification(code: string) {
     try {
       const newVerification = this.verificationRepo.create({ uuid: code });
+
+      await this.verificationRepo.save(newVerification);
       return newVerification;
     } catch (error) {
       throw new InternalServerException();
